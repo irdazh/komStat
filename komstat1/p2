@@ -1,0 +1,154 @@
+# BONUS: ERLANG -----------------------------------------------
+
+fErlang = function(n, lam=0.5, k=7){
+   pr = runif(k*n, 0, 1)
+   x = matrix(-1/lam*log(1-pr), nrow=n, ncol=k)
+   x = apply(x, 1, sum)
+   return(x)
+}
+par(mfrow=c(1,2))
+
+# 1st hist, using density func.
+dE = fErlang(1e5)
+hist(dE, prob=T, density=10, col="red", nclass=20)
+lines(density(dE), col="blue")
+
+# erlang PDF
+pErlang = function(x, lam=0.5, k=7){
+   pdf = lam^k * x^(k-1) * exp(-lam*x) / factorial(k-1)
+   return(pdf)
+}
+# 2nd hist - using PDF
+hist(dE, prob=T, density=10, col="red", nclass=20)
+xx = seq(0,50, by=1e-4)
+lines(xx, pErlang(xx), col="dark blue") 
+
+# sampah
+x = y = 3
+eks = expression(x*y-2)
+eks
+eval(eks)
+
+
+
+# EAKKKKKKK 2nd BATCH ----------------------------
+
+	# logL is log from LH of PDF
+dlogP = D(logP, "lam") #first diff
+ddlogP = D(dlogP, "lam") #2nd diff
+#ddlogL
+
+# FUNC.
+fmleExp = function(x, lam0, tol=1e-6, iter=10){
+	logP = quote( log(lam*exp(-lam*x)) ) # log PD func.
+	
+	# 1st diff func.
+	dlogL = function(x, lam){ 
+		dlogP = D(logP, "lam") # 1st diff of log PDF
+		return(sum(eval(dlogP)))
+	}
+	# 2nd diff func.
+	ddlogL = function(x, lam){ 
+		ddlogP = D(D(logP, "lam"), "lam") # 2nd diff of log PDF
+		return(sum(eval(ddlogP)))
+	}
+	#inisiasi
+	i = 0
+	lam = lam0
+	#lambda hat
+	repeat {
+      i = i+1
+		lamHat = lam - dlogL(x, lam)/ddlogL(x, lam)
+		if (abs(lamHat-lam) <= tol || i >= iter) {break}
+		lam = lamHat
+		cat("Nilai estimasi lambda iterasi ke", i, "adalah", lamHat, "\n")
+	}
+	#lamHat = lam - dlogL(x, lam)/ddlogL(x, lam)
+	#while (abs(lamHat-lam) > tol && i <= iter){
+		#lam = lamHat
+	#}
+	cat("\nNilai estimasi lambda adalah", lamHat, "\n")
+	cat("Nilai diperoleh pada iterasi ke", i, "\n")	
+}
+
+data = c(0.038, 0.177, 0.131, 0.044, 0.048, 0.034, 0.088, 0.086, 0.298, 0.383,
+0.283, 0.092, 0.044, 0.009, 0.075, 0.132, 0.013, 0.585, 0.180, 0.101)
+
+fmleExp (data, 7)
+
+library(MASS); fitdistr(data, "exponential")
+
+
+# EAKKKKK 2nd Ex.  ----------------------------
+fmlePois = function(x, mu0, tol=1e-6, iter=17){
+
+}
+
+
+
+# THIS for LATSOL number 3 ------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+normal = scan(text="61.01275129 55.86656356 60.38371648 81.40185459 
+85.34855638 66.53284062 82.50240235 86.49578179 82.24566015
+73.10975206 80.82097035 63.16399271 81.81944266
+76.35739409 88.62805786 80.60040851 89.97929385
+68.66199175 89.36337016 74.44027829 73.23186099
+74.58975437 86.94656112 87.21971281 73.06367839
+89.48701684 78.73579672 70.87462895 77.38620336
+78.39313886 62.27954945 61.49465274 81.04385068
+73.69158666 81.33155955 75.26540056 47.914112
+76.11212928 86.83132621 74.13253003 60.59068462
+77.15411233 87.86311058 79.04548996 68.30638099
+93.01823237 77.07074578 78.55167944 71.7784457
+74.81118892 71.85055827 83.99577322 96.37596573 79.97237609
+57.48943615 73.96760994 92.48874583 64.13187111 74.35415223
+68.77433139 57.91282919 81.71850904 58.10426435
+78.64524611 64.50252987 81.18735527 67.97373901
+72.50571457 70.19880895 81.0003359 67.32227626
+77.27726052 82.5659907 58.25791321 81.57228005
+71.45981859 74.48658417 81.70226056 68.13573726
+86.41347562 97.65690371 86.34608269 75.60255256
+75.58160264 85.76114601 77.00626368 89.00311258
+83.90901534 95.86742279 68.22010967 87.65693441
+69.15114501 81.91212412 94.13783771 69.5371849
+71.95408811 63.44823011 67.49104544 67.52332505 65.05991327") 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
